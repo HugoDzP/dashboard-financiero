@@ -9,10 +9,10 @@ import {
   CartesianGrid,
 } from "recharts";
 
-export default function BalanceChart({ data }) {
+export default function BalanceChart({ data, compact = false }) {
   if (!data || data.length === 0) {
     return (
-      <p className="text-slate-500 text-sm py-16 text-center">
+      <p className="text-slate-500 text-sm py-6 text-center">
         Aún no hay movimientos para dibujar la evolución del balance.
       </p>
     );
@@ -20,14 +20,14 @@ export default function BalanceChart({ data }) {
 
   if (data.length < 3) {
     return (
-      <p className="text-slate-500 text-sm py-16 text-center">
+      <p className="text-slate-500 text-sm py-6 text-center">
         Añade más movimientos para ver la evolución del balance en el tiempo.
       </p>
     );
   }
 
   return (
-    <ResponsiveContainer width="100%" height={240}>
+    <ResponsiveContainer width="100%" height={compact ? 110 : 240}>
       <LineChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
         <CartesianGrid stroke="#233257" strokeDasharray="3 3" vertical={false} />
         <XAxis

@@ -6,7 +6,7 @@ describe("Footer", () => {
   it("muestra el crédito del proyecto", () => {
     render(<Footer />);
     expect(
-      screen.getByText(/construido con flask \+ postgresql/i)
+      screen.getByText(/construido con flask \+ react \+ postgresql/i)
     ).toBeInTheDocument();
   });
 });

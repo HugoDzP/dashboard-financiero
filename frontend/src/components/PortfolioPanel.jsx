@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import client from "../api/client";
+import client from "../api/client.js";
 import PriceHistoryChart from "./PriceHistoryChart.jsx";
 
 export default function PortfolioPanel({ allocation, totalValue, totalGainLoss, onChanged }) {
@@ -20,7 +20,7 @@ export default function PortfolioPanel({ allocation, totalValue, totalGainLoss, 
   }
 
   return (
-    <div className="bg-ink-900 border border-ink-700 rounded-sm p-5">
+    <div className="bg-ink-900 border border-ink-700 rounded-sm p-5 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-display text-lg text-paper-100">Cartera</h2>
         <span
@@ -38,7 +38,7 @@ export default function PortfolioPanel({ allocation, totalValue, totalGainLoss, 
           placeholder="Ticker (AAPL)"
           value={form.ticker}
           onChange={(e) => setForm({ ...form, ticker: e.target.value })}
-          className="col-span-2 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs uppercase"
+          className="col-span-2 min-w-0 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs uppercase"
         />
         <input
           type="number"
@@ -47,7 +47,7 @@ export default function PortfolioPanel({ allocation, totalValue, totalGainLoss, 
           placeholder="Cantidad"
           value={form.quantity}
           onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-          className="col-span-1 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs"
+          className="col-span-1 min-w-0 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs"
         />
         <input
           type="number"
@@ -56,7 +56,7 @@ export default function PortfolioPanel({ allocation, totalValue, totalGainLoss, 
           placeholder="Coste medio"
           value={form.avg_cost}
           onChange={(e) => setForm({ ...form, avg_cost: e.target.value })}
-          className="col-span-1 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs"
+          className="col-span-1 min-w-0 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs"
         />
         <button
           type="submit"
@@ -67,38 +67,40 @@ export default function PortfolioPanel({ allocation, totalValue, totalGainLoss, 
         </button>
       </form>
 
-      {allocation.length === 0 && (
-        <p className="text-slate-500 text-sm py-6 text-center">
-          Aún no tienes posiciones en cartera.
-        </p>
-      )}
-      {allocation.map((h) => (
-        <div key={h.ticker}>
-          <div
-            onClick={() => setExpandedTicker(expandedTicker === h.ticker ? null : h.ticker)}
-            className="ledger-row flex items-center justify-between py-2 text-sm cursor-pointer hover:bg-ink-800/50"
-          >
-            <div>
-              <p className="text-paper-100 font-mono">{h.ticker}</p>
-              <p className="text-xs text-slate-500">{h.quantity} uds</p>
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        {allocation.length === 0 && (
+          <p className="text-slate-500 text-sm py-6 text-center">
+            Aún no tienes posiciones en cartera.
+          </p>
+        )}
+        {allocation.map((h) => (
+          <div key={h.ticker}>
+            <div
+              onClick={() => setExpandedTicker(expandedTicker === h.ticker ? null : h.ticker)}
+              className="ledger-row flex items-center justify-between py-2 text-sm cursor-pointer hover:bg-ink-800/50"
+            >
+              <div>
+                <p className="text-paper-100 font-mono">{h.ticker}</p>
+                <p className="text-xs text-slate-500">{h.quantity} uds</p>
+              </div>
+              <div className="text-right">
+                <p className="tabular text-paper-100">
+                  {h.value.toLocaleString("es-ES", { style: "currency", currency: "EUR" })}
+                </p>
+                <p
+                  className={`tabular text-xs ${
+                    h.gain_loss >= 0 ? "text-teal-500" : "text-brick-400"
+                  }`}
+                >
+                  {h.gain_loss >= 0 ? "+" : ""}
+                  {h.gain_loss.toLocaleString("es-ES", { style: "currency", currency: "EUR" })}
+                </p>
+              </div>
             </div>
-            <div className="text-right">
-              <p className="tabular text-paper-100">
-                {h.value.toLocaleString("es-ES", { style: "currency", currency: "EUR" })}
-              </p>
-              <p
-                className={`tabular text-xs ${
-                  h.gain_loss >= 0 ? "text-teal-500" : "text-brick-400"
-                }`}
-              >
-                {h.gain_loss >= 0 ? "+" : ""}
-                {h.gain_loss.toLocaleString("es-ES", { style: "currency", currency: "EUR" })}
-              </p>
-            </div>
+            {expandedTicker === h.ticker && <PriceHistoryChart ticker={h.ticker} />}
           </div>
-          {expandedTicker === h.ticker && <PriceHistoryChart ticker={h.ticker} />}
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

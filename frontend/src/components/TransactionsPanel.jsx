@@ -82,7 +82,7 @@ export default function TransactionsPanel({ transactions, onChanged }) {
   const categories = type === "expense" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
 
   return (
-    <div className="bg-ink-900 border border-ink-700 rounded-sm p-5">
+    <div className="bg-ink-900 border border-ink-700 rounded-sm p-5 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-display text-lg text-paper-100">Movimientos</h2>
         <label className="text-xs font-mono text-gold-400 hover:underline cursor-pointer">
@@ -115,53 +115,57 @@ export default function TransactionsPanel({ transactions, onChanged }) {
         </button>
       </div>
 
-      <form onSubmit={handleAdd} className="grid grid-cols-[auto_1fr_auto_auto] gap-2 mb-4">
-        <input
-          type="date"
-          required
-          value={form.date}
-          onChange={(e) => setForm({ ...form, date: e.target.value })}
-          className="bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs w-[136px]"
-        />
+      <form onSubmit={handleAdd} className="space-y-2 mb-4">
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            type="date"
+            required
+            value={form.date}
+            onChange={(e) => setForm({ ...form, date: e.target.value })}
+            className="min-w-0 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs"
+          />
+          <select
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            className="min-w-0 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs capitalize"
+          >
+            {categories.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
         <input
           type="text"
           required
           placeholder="Concepto"
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
-          className="min-w-0 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs"
+          className="w-full bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs"
         />
-        <select
-          value={form.category}
-          onChange={(e) => setForm({ ...form, category: e.target.value })}
-          className="bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs capitalize w-[130px]"
-        >
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-        <input
-          type="number"
-          step="0.01"
-          min="0"
-          required
-          placeholder="Importe"
-          value={form.amount}
-          onChange={(e) => setForm({ ...form, amount: e.target.value })}
-          className="bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs w-[100px]"
-        />
-        <button
-          type="submit"
-          disabled={submitting}
-          className="col-span-4 bg-teal-500 hover:bg-teal-600 disabled:opacity-50 text-paper-100 text-xs py-2 rounded-sm"
-        >
-          Añadir movimiento
-        </button>
+        <div className="grid grid-cols-[1fr_2fr] gap-2">
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            required
+            placeholder="Importe"
+            value={form.amount}
+            onChange={(e) => setForm({ ...form, amount: e.target.value })}
+            className="min-w-0 bg-ink-950 border border-ink-700 rounded-sm px-2 py-1.5 text-paper-100 text-xs"
+          />
+          <button
+            type="submit"
+            disabled={submitting}
+            className="bg-teal-500 hover:bg-teal-600 disabled:opacity-50 text-paper-100 text-xs py-2 rounded-sm"
+          >
+            Añadir movimiento
+          </button>
+        </div>
       </form>
 
-      <div className="max-h-80 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto">
         {transactions.length === 0 && (
           <p className="text-slate-500 text-sm py-6 text-center">
             No hay movimientos todavía. Añade uno o importa un CSV.

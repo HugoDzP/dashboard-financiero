@@ -6,7 +6,7 @@ __pycache__/
 instance/
 *.db
  
-# --- Variables de entorno (secretos reales) ---
+# --- Variables de entorno ---
 .env
 backend/.env
 frontend/.env

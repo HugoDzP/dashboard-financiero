@@ -1,0 +1,22 @@
+# --- Backend (Python) ---
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+instance/
+*.db
+ 
+# --- Variables de entorno (secretos reales) ---
+.env
+backend/.env
+frontend/.env
+ 
+# --- Frontend (Node) ---
+node_modules/
+dist/
+ 
+# --- Editores / SO ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

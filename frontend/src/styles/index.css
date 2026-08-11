@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* Regla de "libro de contabilidad": una línea horizontal fina entre filas,
+   en vez de tarjetas con sombra pesada. Es el elemento firma del diseño. */
+.ledger-row {
+  border-bottom: 1px solid theme("colors.ink.700");
+}
+.ledger-row:last-child {
+  border-bottom: none;
+}
+
+.tabular {
+  font-family: "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}

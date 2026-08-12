@@ -6,8 +6,9 @@ import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 
 function PrivateRoute({ children }) {
-  const { user } = useAuth();
+  const { user, initializing } = useAuth();
   const hasToken = !!localStorage.getItem("access_token");
+  if (initializing) return null;
   if (!user && !hasToken) return <Navigate to="/login" replace />;
   return children;
 }

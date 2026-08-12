@@ -1,3 +1,4 @@
+import logging
 from collections import defaultdict
 
 import yfinance as yf
@@ -7,6 +8,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import Transaction, Holding
 
 bp = Blueprint("dashboard", __name__, url_prefix="/api/dashboard")
+logger = logging.getLogger(__name__)
 
 
 @bp.get("/summary")
@@ -35,7 +37,8 @@ def summary():
     for h in holdings:
         try:
             price = yf.Ticker(h.ticker).fast_info.last_price or 0.0
-        except Exception:
+        except Exception as exc:
+            logger.error("Fallo al obtener precio de %s: %s", h.ticker, exc)
             price = 0.0
         value = price * float(h.quantity)
         cost = float(h.avg_cost) * float(h.quantity)
